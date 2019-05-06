@@ -10,58 +10,64 @@
 #include <string>
 using namespace std;
 
-const int maxElemen=255;
-struct Stack{
-	char isi[maxElemen];
-	int TOP;
-	Stack* next;
-};
-typedef Stack* pointer;
+typedef struct stack
+{
+    char isi;
+    stack *next;
+}   *stk, *ptr;
 
-void createStack(Stack& stack){
-	stack.TOP = -1;
+void newNode(ptr &pNew, char fill)
+{
+    pNew = new stack;
+    pNew->isi=fill;
+    pNew->next = NULL;
 }
 
-void push(Stack& TOP, pointer pBaru){
-	cout<<"Push Stack "<<endl;
-	if (TOP==NULL) // Stack kosong
-		TOP=pBaru;
-	else { // Stack ada isi
-		pBaru->next=TOP;
-		TOP=pBaru;
-	}
+void push(stk &head, ptr pNew)
+{
+    if(head==NULL)
+        head = pNew;
+
+    else
+    {
+        pNew->next = head;
+        head = pNew;
+    }
 }
 
-void Pop(Stack& TOP, pointer& pHapus){
-	cout<<"Pop Stack "<<endl;
-	if (TOP==NULL){
-		cout<<"Stack kosong "<<endl;
-		pHapus=NULL;
-	}
-	else if (TOP->next==NULL){
-		pHapus=TOP;
-		TOP=NULL;
-	}	
-	else {
-		pHapus=TOP;
-		TOP=TOP->next;
-		pHapus->next=NULL;
-	}
+void pop(stk &head, ptr &pSav)
+{
+    if(head==NULL)
+        cout << "STACK EMPTY!\n";
+
+    else if(head->next==NULL)
+    {
+        pSav=head;
+        head=NULL;
+    }
+
+    else
+    {
+        pSav = head;
+        head = pSav->next;
+        pSav->next = NULL;
+    }
 }
 
+int main()
+{
+    stk S=NULL;
+    ptr p=NULL;
+    
+    for(char i='A'; i<='E'; i++)
+    {
+        newNode(p,i);
+        push(S,p);
+    }
 
-int main(){
-	char string[255];	
-	char temp;
-	pointer p;
-	createStack(S);
-	
-	cout << "Masukkan kata :"; cin.getline(string, 255);
-	cout << "Kata : " << string << endl;
-	
-	reverse(S, p,	 string);
-	
-	cout << "Reversed string : " << string;
-	
-	return 0;
+    do
+    {
+        pop(S,p);
+        cout << p->isi << "\n";
+    }while(S!=NULL);
 }
